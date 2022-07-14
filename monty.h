@@ -25,12 +25,43 @@ typedef struct stack_s
 #include <unistd.h>
 #include <ctype.h>
 
-static int digit_check(char *str);
-void fpush(stack_t **stack, unsigned int number);
-void fpall(stack_t **top, unsigned int number);
+void m_push(stack_t **stack, unsigned int number);
+void m_pall(stack_t **top, unsigned int number);
+stack_t *add_node(stack_t **top, const int n);
+void m_queue(stack_t **stack, unsigned int number);
+void free_stack(stack_t **stack, unsigned int number);
+int main(int argc, char *argv[]);
+void free_lineptr(int status, void *arg);
+void get_op(char *op, stack_t **stack, unsigned int line_number);
+void m_fs_close(int status, void *arg);
+void m_nop(stack_t **top, unsigned int line_number);
+void m_pop(stack_t **top, unsigned int line_number);
+void m_pint(stack_t **top, unsigned int line_number);
+void m_swap(stack_t **top, unsigned int line_number);
+void m_add(stack_t **top, unsigned int line_number);
 
 
 
+
+
+
+
+/**
+ * struct var_s - struct to contain the main variables of the Monty interpreter
+ * @queue: flag to determine if in stack vs queue mode
+ * @stack_len: length of the stack
+ */
+typedef struct var_s
+{
+	int queue;
+	size_t stack_len;
+} var_t;
+
+#define STACK 0
+#define QUEUE 1
+
+/* global struct to hold flag for queue and stack length */
+extern var_t var;
 
 /**
  * struct instruction_s - opcode and its function

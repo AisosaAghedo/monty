@@ -20,12 +20,12 @@ static int digit_check(char *str)
 }
 
 /**
- * fpush - push an integer onto the stack
+ * m_push - push an integer onto the stack
  * @stack: double pointer to the beginning of the stack
- * @number: script line number
+ * @line_number: script line number
  * Return: nothing
  */
-void fpush(stack_t **stack, unsigned int number)
+void m_push(stack_t **stack, unsigned int line_number)
 {
 	char *arg;
 	int i;
@@ -33,27 +33,27 @@ void fpush(stack_t **stack, unsigned int number)
 	arg = strtok(NULL, "\n\t\r ");
 	if (arg == NULL || digit_check(arg))
 	{
-		dprintf(STDOUT_FILENO,
+		fprintf(stdout,
 			"L%u: usage: push integer\n",
-			number);
+			line_number);
 		exit(EXIT_FAILURE);
 	}
 	i = atoi(arg);
 	if (!add_node(stack, i))
 	{
-		dprintf(STDOUT_FILENO, "Error: malloc failed\n");
+		fprintf(stdout, "Error: malloc failed\n");
 		exit(EXIT_FAILURE);
 	}
 	var.stack_len++;
 }
 
 /**
- * fpall - prints all values on the stack starting from the top
+ * m_pall - prints all values on the stack starting from the top
  * @top: double pointer to head of stack
- * @number: line number being executed from script file
+ * @line_number: line number being executed from script file
  * Return: void
  */
-void fpall(stack_t **top, unsigned int number)
+void m_pall(stack_t **top, unsigned int line_number)
 {
 	stack_t *head;
 
