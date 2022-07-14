@@ -31,7 +31,7 @@ stack_t *add_node(stack_t **top, const int n);
 void m_queue(stack_t **stack, unsigned int number);
 void free_stack(stack_t **stack, unsigned int number);
 int main(int argc, char *argv[]);
-void free_lineptr(int search, void *arg);
+void free_lineptr(int status, void *arg);
 void get_op(char *op, stack_t **stack, unsigned int line_number);
 void m_fs_close(int status, void *arg);
 void m_nop(stack_t **top, unsigned int line_number);

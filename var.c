@@ -32,9 +32,6 @@ int main(int argc, char *argv[])
 		fprintf(stdout, "Error: Can't open file %s\n", argv[1]);
 		exit(EXIT_FAILURE);
 	}
-	on_exit(free_lineptr);
-	on_exit(free_stack);
-	on_exit(m_fs_close);
 	while (fgets(lineptr, n, fs) != NULL)
 	{
 	
