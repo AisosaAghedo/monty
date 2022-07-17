@@ -1,82 +1,72 @@
-#ifndef MONTY_H
-#define MONTY_H
+#ifndef MAIN_H
+#define MAIN_H
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+/**
+ * struct fig - a bunch of necessary infos
+ * @is_digit: checks if string are digits
+ * @value: the number to be pushed(works only if is_digit is true)
+ * @fileo: stores pointer to opened file
+ */
+typedef struct fig
+{
+	bool is_digit;
+	int value;
+	FILE *fileo;
+} infos;
+
+extern infos info;
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
  * @n: integer
  * @prev: points to the previous element of the stack (or queue)
  * @next: points to the next element of the stack (or queue)
- *
  * Description: doubly linked list node structure
  * for stack, queues, LIFO, FIFO
  */
+
+
 typedef struct stack_s
 {
-        int n;
-        struct stack_s *prev;
-        struct stack_s *next;
+	int n;
+	struct stack_s *prev;
+	struct stack_s *next;
 } stack_t;
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <ctype.h>
-
-void m_push(stack_t **stack, unsigned int number);
-void m_pall(stack_t **top, unsigned int number);
-stack_t *add_node(stack_t **top, const int n);
-void m_queue(stack_t **stack, unsigned int number);
-void free_stack(stack_t **stack, unsigned int number);
-int main(int argc, char *argv[]);
-void free_lineptr(int status, void *arg);
-void get_op(char *op, stack_t **stack, unsigned int line_number);
-void m_fs_close(int status, void *arg);
-void m_nop(stack_t **top, unsigned int line_number);
-void m_pop(stack_t **top, unsigned int line_number);
-void m_pint(stack_t **top, unsigned int line_number);
-void m_swap(stack_t **top, unsigned int line_number);
-void m_add(stack_t **top, unsigned int line_number);
-void m_pchar(stack_t **stack, unsigned int line_number);
-void m_pstr(stack_t **stack, unsigned int line_number);
-
-
-
-
-
-
-
-/**
- * struct var_s - struct to contain the main variables of the Monty interpreter
- * @queue: flag to determine if in stack vs queue mode
- * @stack_len: length of the stack
- */
-typedef struct var_s
-{
-	int queue;
-	size_t stack_len;
-} var_t;
-
-#define STACK 0
-#define QUEUE 1
-
-/* global struct to hold flag for queue and stack length */
-extern var_t var;
-
+void add(stack_t **stack, unsigned int line_num);
+void swap(stack_t **stack, unsigned int line_num);
+void pint(stack_t **stack, unsigned int line_num);
+void push(stack_t **stack, unsigned int l);
+void pall(stack_t **stack, unsigned int l);
+void file_reader(void);
+void arg_sort(char *buf, unsigned int line_number, stack_t **stack);
+void func_caller(char *argument1, unsigned int line_number, stack_t **stack);
+void is_a_num(char *argument2);
+void free_stack(stack_t **stack);
+void pop(stack_t **stack, unsigned int line_num);
+void sub(stack_t **stack, unsigned int line_num);
+void mul(stack_t **stack, unsigned int line_num);
+void m_div(stack_t **stack, unsigned int line_num);
+void nop(stack_t **stack, unsigned int line_num);
+void mod(stack_t **stack, unsigned int line_num);
+void pchar(stack_t **stack, unsigned int line_num);
+void pstr(stack_t **stack, unsigned int line_num);
+void rotl(stack_t **stack, unsigned int line_num);
+void rotr(stack_t **stack, unsigned int line_num);
 /**
  * struct instruction_s - opcode and its function
  * @opcode: the opcode
  * @f: function to handle the opcode
- *
  * Description: opcode and its function
  * for stack, queues, LIFO, FIFO
  */
 typedef struct instruction_s
-{
-        char *opcode;
-        void (*f)(stack_t **stack, unsigned int line_number);
+{         char *opcode;
+	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
 #endif

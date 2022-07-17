@@ -1,54 +1,47 @@
 #include "monty.h"
+
 /**
- * m_add - function that adds the top two elements of the stack
- * @top: double pointer to the beginning of the stack
- * @line_number: script line number
+ * add - function that adds the top of stack with the second top of stack
+ * @stack: address to pointer to top of stack
+ * @line_num: current line number
  * Return: void
  */
-void m_add(stack_t **top, unsigned int line_number)
-{
-	int n = 0;
 
-	if (var.stack_len < 2)
+void add(stack_t **stack, unsigned int line_num)
+{
+	int sum = 0;
+	stack_t *tmp = *stack;
+
+	if (*stack == NULL || (*stack)->next == NULL)
 	{
-		fprintf(stdout,
-			"L%u: can't add, stack too short\n",
-			line_number);
+		fprintf(stderr, "L%u: can't add, stack too short\n", line_num);
+		fclose(info.fileo);
+		free_stack(stack);
 		exit(EXIT_FAILURE);
 	}
-	n += (*top)->n;
-	m_pop(top, line_number);
-	(*top)->n += n;
+	sum = tmp->n + tmp->next->n;
+	pop(stack, line_num);
+	(*stack)->n = sum;
 }
 
 /**
- * m_swap - function that swaps top two elements of stack
- * @top: double pointer to head of stack
- * @line_number: line number of current operation
+ * swap - function that swaps the top of stack with the second top of stack
+ * @stack: address to pointer to top of stack
+ * @line_num: current line number
  * Return: void
  */
-void m_swap(stack_t **top, unsigned int line_number)
+void swap(stack_t **stack, unsigned int line_num)
 {
-	stack_t *next;
+	int num;
 
-	if (var.stack_len < 2)
+	if (*stack == NULL || (*stack)->next == NULL)
 	{
-		fprintf(stdout,
-			"L%u: can't swap, stack too short\n",
-			line_number);
+		fprintf(stderr, "L%u: can't swap, stack too short\n", line_num);
+		fclose(info.fileo);
+		free_stack(stack);
 		exit(EXIT_FAILURE);
 	}
-	if (var.stack_len == 2)
-	{
-		*top = (*top)->next;
-		return;
-	}
-	next = (*top)->next;
-	next->prev = (*top)->prev;
-	(*top)->prev->next = next;
-	(*top)->prev = next;
-	(*top)->next = next->next;
-	next->next->prev = *top;
-	next->next = *top;
-	*top = next;
+	num = (*stack)->n;
+	(*stack)->n = (*stack)->next->n;
+	(*stack)->next->n = num;
 }

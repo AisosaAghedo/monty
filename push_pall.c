@@ -1,72 +1,60 @@
 #include "monty.h"
-
 /**
- * digit_check - function that checks if a string only contains digits
- * @str: string to be checked
- * Return: 0 if str contaons only digits, else 1
- */
-static int digit_check(char *str)
-{
-	int i;
-
-	for (i = 0; str[i]; i++)
-	{
-		if (str[i] == '-' && i == 0)
-			continue;
-		if (isdigit(str[i]) == 0)
-			return (1);
-	}
-	return (0);
-}
-
-/**
- * m_push - push an integer onto the stack
- * @stack: double pointer to the beginning of the stack
- * @line_number: script line number
+ * push - adds an element to the stack
+ * @stack: address of pointer to top of stack
+ * @line_number: current line in file
  * Return: nothing
  */
-void m_push(stack_t **stack, unsigned int line_number)
+void push(stack_t **stack, unsigned int line_number)
 {
-	char *arg;
-	int i;
+	stack_t *new;
 
-	arg = strtok(NULL, "\n\t\r ");
-	if (arg == NULL || digit_check(arg))
+	if (info.is_digit == false)
 	{
-		fprintf(stdout,
-			"L%u: usage: push integer\n",
-			line_number);
+		free_stack(stack);
+		fclose(info.fileo);
+		fprintf(stderr, "L%u: usage: push integer\n", line_number);
 		exit(EXIT_FAILURE);
 	}
-	i = atoi(arg);
-	if (!add_node(stack, i))
+	new = (stack_t *) malloc(sizeof(stack_t));
+	if (new == NULL)
 	{
-		fprintf(stdout, "Error: malloc failed\n");
+		free_stack(stack);
+		fclose(info.fileo);
+		fprintf(stderr, "Error: malloc failed\n");
 		exit(EXIT_FAILURE);
 	}
-	var.stack_len++;
+	new->n = info.value;
+	new->prev = NULL;
+	if (*stack == NULL)
+	{
+		new->next = NULL;
+		*stack = new;
+	}
+	else
+	{
+		new->next = *stack;
+		(*stack)->prev = new;
+		*stack = new;
+	}
+
 }
-
 /**
- * m_pall - prints all values on the stack starting from the top
- * @top: double pointer to head of stack
- * @line_number: line number being executed from script file
- * Return: void
+ * pall - prints all number on stack
+ * @stack: address of pointer to top of stack
+ * @line_number: current line in file
  */
-void m_pall(stack_t **top, unsigned int line_number)
+void pall(stack_t **stack, unsigned int line_number)
 {
-	stack_t *head;
+	stack_t *temp = *stack;
 
-	(void)(line_number);
+	(void) line_number;
+	if (*stack == NULL)
+		return;
 
-	head = *top;
-	while (head != NULL)
+	while (temp != NULL)
 	{
-		printf("%d\n", head->n);
-		head = head->next;
-		if (head == *top)
-		{
-			return;
-		}
+		printf("%d\n", temp->n);
+		temp = temp->next;
 	}
 }

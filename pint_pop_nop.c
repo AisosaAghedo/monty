@@ -1,59 +1,52 @@
 #include "monty.h"
+
 /**
- * m_pint - function that prints value on top of `stack', or exit if stack is empty
- * @top: double pointer to head of stack
- * @line_number: line number of current operation
+ * pint - prints out number at top of stack
+ * @stack: address of pointer to top of stack
+ * @line_num: current line number
  * Return: void
  */
-void m_pint(stack_t **top, unsigned int line_number)
+void pint(stack_t **stack, unsigned int line_num)
 {
-	stack_t *head = *top;
-
-	if (var.stack_len == 0)
+	if (*stack == NULL)
 	{
-		fprintf(stdout,
-			"L%u: can't pint, stack empty\n",
-			line_number);
+		fprintf(stderr,"L%u: can't pint, stack empty\n", line_num);
+		fclose(info.fileo);
 		exit(EXIT_FAILURE);
 	}
-	printf("%d\n", head->n);
+	printf("%d\n", (*stack)->n);
+}
+/**
+ * pop - removes element at top of stack
+ * @stack: address of pointer to top of stack
+ * @line_num: current line number
+ * Return: void
+ */
+
+void pop(stack_t **stack, unsigned int line_num)
+{
+	stack_t *tmp;
+
+	if (*stack == NULL)
+	{
+		fprintf(stderr, "L%u: can't pop an empty stack\n", line_num);
+		fclose(info.fileo);
+		exit(EXIT_FAILURE);
+	}
+	tmp = (*stack)->next;
+	free(*stack);
+	if (tmp != NULL)
+		tmp->prev = NULL;
+	*stack = tmp;
 }
 
 /**
- * m_pop - function that removes top element off of `stack'
- * @top: double pointer to head of stack
- * @line_number: line number of current operation
- * Return: void
+ * nop - does nothing
+ * @stack: address to pointer to top of stack
+ * @line_num: current line number
  */
-void m_pop(stack_t **top, unsigned int line_number)
+void nop(stack_t **stack, unsigned int line_num)
 {
-	stack_t *pop = *top;
-
-	if (var.stack_len == 0)
-	{
-		fprintf(stdout,
-			"L%u: can't pop an empty stack\n",
-			line_number);
-		exit(EXIT_FAILURE);
-	}
-	(*top)->next->prev = (*top)->prev;
-	(*top)->prev->next = (*top)->next;
-	if (var.stack_len != 1)
-		*top = (*top)->next;
-	else
-		*top = NULL;
-	free(pop);
-	var.stack_len--;
-}
-
-/**
- * m_nop - function where no operation is performed
- * @top: double pointer to head of stack
- * @line_number: line number of current operation
- * Return: void
- */
-void m_nop(stack_t **top, unsigned int line_number)
-{
-	(void)top;
-	(void)line_number;
+	(void)stack;
+	(void)line_num;
 }
